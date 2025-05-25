@@ -83,7 +83,7 @@ class CustomErrorWidget extends StatelessWidget {
           // Error Message
           Text(
             errorInfo.message,
-            style: AppTextStyles.bodyMedium(context).copyWith(
+            style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
               color: isDark ? AppColors.darkOnSurfaceVariant : AppColors.lightOnSurfaceVariant,
             ),
             textAlign: TextAlign.center,
@@ -129,7 +129,7 @@ class CustomErrorWidget extends StatelessWidget {
               children: [
                 Text(
                   errorInfo.title,
-                  style: AppTextStyles.bodyMedium(context).copyWith(
+                  style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
                     fontWeight: FontWeight.w600,
                     color: isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
                   ),
@@ -163,7 +163,7 @@ class CustomErrorWidget extends StatelessWidget {
     return ExpansionTile(
       title: Text(
         'Error Details',
-        style: AppTextStyles.bodyMedium(context).copyWith(
+        style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
           fontWeight: FontWeight.w600,
           color: isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
         ),

@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class BookingConfirmationPage extends ConsumerStatefulWidget {
-  final String turfId;
+  final String bookingId;
 
-  const BookingConfirmationPage({super.key, required this.turfId});
+  const BookingConfirmationPage({super.key, required this.bookingId});
 
   @override
   ConsumerState<BookingConfirmationPage> createState() =>

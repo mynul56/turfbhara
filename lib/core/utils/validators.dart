@@ -193,6 +193,18 @@ class Validators {
     
     return null;
   }
+
+  // Decimal validation
+  static String? decimal(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a value';
+    }
+    final decimalRegExp = RegExp(r'^\d*\.?\d*$');
+    if (!decimalRegExp.hasMatch(value)) {
+      return 'Please enter a valid decimal number';
+    }
+    return null;
+  }
   
   // Date validation
   static String? date(String? value, [String? fieldName]) {

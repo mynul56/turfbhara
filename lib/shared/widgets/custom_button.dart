@@ -174,7 +174,8 @@ class CustomButton extends StatelessWidget {
           height: height ?? 32,
           padding: padding ??
               const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          textStyle: textStyle ?? (textTheme.labelSmall ?? const TextStyle(fontSize: 12)),
+          textStyle: textStyle ??
+              (textTheme.labelSmall ?? const TextStyle(fontSize: 12)),
           iconSize: 16,
         );
 
@@ -183,7 +184,8 @@ class CustomButton extends StatelessWidget {
           height: height ?? 44,
           padding: padding ??
               const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          textStyle: textStyle ?? (textTheme.labelMedium ?? const TextStyle(fontSize: 14)),
+          textStyle: textStyle ??
+              (textTheme.labelMedium ?? const TextStyle(fontSize: 14)),
           iconSize: 20,
         );
 
@@ -192,7 +194,8 @@ class CustomButton extends StatelessWidget {
           height: height ?? 52,
           padding: padding ??
               const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          textStyle: textStyle ?? (textTheme.labelLarge ?? const TextStyle(fontSize: 16)),
+          textStyle: textStyle ??
+              (textTheme.labelLarge ?? const TextStyle(fontSize: 16)),
           iconSize: 24,
         );
 
@@ -201,7 +204,9 @@ class CustomButton extends StatelessWidget {
           height: height ?? 60,
           padding: padding ??
               const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-          textStyle: textStyle ?? (textTheme.headlineSmall ?? const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          textStyle: textStyle ??
+              (textTheme.headlineSmall ??
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           iconSize: 28,
         );
     }

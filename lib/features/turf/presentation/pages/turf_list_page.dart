@@ -3,7 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class TurfListPage extends ConsumerStatefulWidget {
-  const TurfListPage({super.key});
+  final String? category;
+  final String? location;
+  final String? searchQuery;
+
+  const TurfListPage({
+    super.key,
+    this.category,
+    this.location,
+    this.searchQuery,
+  });
+
 
   @override
   ConsumerState<TurfListPage> createState() => _TurfListPageState();
