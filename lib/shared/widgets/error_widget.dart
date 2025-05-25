@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
 import '../../core/error/failures.dart';
 import 'custom_button.dart';
 
@@ -44,18 +43,20 @@ class CustomErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    
+    final colorScheme = theme.colorScheme;
+
     final errorInfo = _getErrorInfo();
-    
+
     if (compact) {
-      return _buildCompactError(context, isDark, errorInfo);
+      return _buildCompactError(context, errorInfo);
     }
-    
-    return _buildFullError(context, isDark, errorInfo);
+
+    return _buildFullError(context, errorInfo);
   }
 
-  Widget _buildFullError(BuildContext context, bool isDark, _ErrorInfo errorInfo) {
+  Widget _buildFullError(BuildContext context, _ErrorInfo errorInfo) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Padding(
       padding: padding ?? const EdgeInsets.all(24),
       child: Column(
@@ -69,34 +70,36 @@ class CustomErrorWidget extends StatelessWidget {
             color: errorInfo.iconColor,
           ),
           const SizedBox(height: 24),
-          
+
           // Error Title
           Text(
             errorInfo.title,
-            style: AppTextStyles.headlineSmall(context).copyWith(
-              color: isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontSize: 24,
+              color: colorScheme.onSurface,
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
-          
+
           // Error Message
           Text(
             errorInfo.message,
-            style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
-              color: isDark ? AppColors.darkOnSurfaceVariant : AppColors.lightOnSurfaceVariant,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontSize: 16,
+              color: colorScheme.onSurfaceVariant,
             ),
             textAlign: TextAlign.center,
           ),
-          
+
           // Error Details (expandable)
-          if (showDetails && errorInfo.details.isNotEmpty) ..[
+          if (showDetails && errorInfo.details.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _buildDetailsSection(context, isDark, errorInfo.details),
+            _buildDetailsSection(context, errorInfo.details),
           ],
-          
+
           const SizedBox(height: 32),
-          
+
           // Action Buttons
           _buildActionButtons(context),
         ],
@@ -104,7 +107,9 @@ class CustomErrorWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCompactError(BuildContext context, bool isDark, _ErrorInfo errorInfo) {
+  Widget _buildCompactError(BuildContext context, _ErrorInfo errorInfo) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Container(
       padding: padding ?? const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -129,22 +134,24 @@ class CustomErrorWidget extends StatelessWidget {
               children: [
                 Text(
                   errorInfo.title,
-                  style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   errorInfo.message,
-                  style: AppTextStyles.bodySmall(context).copyWith(
-                    color: isDark ? AppColors.darkOnSurfaceVariant : AppColors.lightOnSurfaceVariant,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontSize: 14,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
             ),
           ),
-          if (onAction != null) ..[
+          if (onAction != null) ...[
             const SizedBox(width: 12),
             TextButton(
               onPressed: onAction,
@@ -159,13 +166,16 @@ class CustomErrorWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailsSection(BuildContext context, bool isDark, String details) {
+  Widget _buildDetailsSection(BuildContext context, String details) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return ExpansionTile(
       title: Text(
         'Error Details',
-        style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
+        style: theme.textTheme.bodyMedium?.copyWith(
+          fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
+          color: colorScheme.onSurface,
         ),
       ),
       children: [
@@ -174,14 +184,15 @@ class CustomErrorWidget extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: isDark ? AppColors.darkSurfaceVariant : AppColors.lightSurfaceVariant,
+            color: colorScheme.surfaceVariant,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             details,
-            style: AppTextStyles.bodySmall(context).copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontSize: 14,
               fontFamily: 'monospace',
-              color: isDark ? AppColors.darkOnSurfaceVariant : AppColors.lightOnSurfaceVariant,
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
         ),
@@ -191,7 +202,7 @@ class CustomErrorWidget extends StatelessWidget {
 
   Widget _buildActionButtons(BuildContext context) {
     final buttons = <Widget>[];
-    
+
     if (onAction != null) {
       buttons.add(
         CustomButton(
@@ -201,7 +212,7 @@ class CustomErrorWidget extends StatelessWidget {
         ),
       );
     }
-    
+
     if (onSecondaryAction != null) {
       buttons.add(
         CustomButton(
@@ -211,15 +222,15 @@ class CustomErrorWidget extends StatelessWidget {
         ),
       );
     }
-    
+
     if (buttons.isEmpty) {
       return const SizedBox.shrink();
     }
-    
+
     if (buttons.length == 1) {
       return buttons.first;
     }
-    
+
     return Column(
       children: [
         buttons.first,
@@ -234,13 +245,14 @@ class CustomErrorWidget extends StatelessWidget {
     if (failure != null) {
       return _getErrorInfoFromFailure(failure!);
     }
-    
+
     // Otherwise use provided values or defaults based on type
     switch (type) {
       case ErrorType.network:
         return _ErrorInfo(
           title: title ?? 'Network Error',
-          message: message ?? 'Please check your internet connection and try again.',
+          message:
+              message ?? 'Please check your internet connection and try again.',
           details: details ?? '',
           icon: icon ?? Icons.wifi_off,
           iconColor: iconColor ?? AppColors.error,
@@ -248,7 +260,8 @@ class CustomErrorWidget extends StatelessWidget {
       case ErrorType.server:
         return _ErrorInfo(
           title: title ?? 'Server Error',
-          message: message ?? 'Something went wrong on our end. Please try again later.',
+          message: message ??
+              'Something went wrong on our end. Please try again later.',
           details: details ?? '',
           icon: icon ?? Icons.cloud_off,
           iconColor: iconColor ?? AppColors.error,
@@ -280,7 +293,8 @@ class CustomErrorWidget extends StatelessWidget {
       case ErrorType.permission:
         return _ErrorInfo(
           title: title ?? 'Permission Denied',
-          message: message ?? 'You do not have permission to access this resource.',
+          message:
+              message ?? 'You do not have permission to access this resource.',
           details: details ?? '',
           icon: icon ?? Icons.block,
           iconColor: iconColor ?? AppColors.error,
@@ -288,7 +302,8 @@ class CustomErrorWidget extends StatelessWidget {
       case ErrorType.timeout:
         return _ErrorInfo(
           title: title ?? 'Request Timeout',
-          message: message ?? 'The request took too long to complete. Please try again.',
+          message: message ??
+              'The request took too long to complete. Please try again.',
           details: details ?? '',
           icon: icon ?? Icons.timer_off,
           iconColor: iconColor ?? AppColors.warning,
