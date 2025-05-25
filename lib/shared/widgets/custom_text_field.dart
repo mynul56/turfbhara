@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -171,7 +172,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           Text(
             widget.label!,
             style: widget.labelStyle ??
-                (Theme.of(context).textTheme.labelMedium ?? const TextStyle(fontSize: 12)).copyWith(
+                AppTextStyles.labelMedium(context).copyWith(
                   color: _hasError
                       ? (widget.errorBorderColor ?? AppColors.error)
                       : (isDark
@@ -210,7 +211,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   ? AutovalidateMode.onUserInteraction
                   : AutovalidateMode.disabled),
           autofillHints: widget.autofillHints,
-          style: widget.textStyle ?? (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)),
+          style: widget.textStyle ?? AppTextStyles.bodyMedium(context),
           decoration: _buildInputDecoration(context, isDark),
         ),
         if (widget.helperText != null && !_hasError) ...[
@@ -218,7 +219,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           Text(
             widget.helperText!,
             style: widget.helperStyle ??
-                (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
+                AppTextStyles.bodyMedium(context).copyWith(
                   color: isDark
                       ? AppColors.darkOnSurface
                       : AppColors.lightOnSurface,
@@ -230,7 +231,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           Text(
             _errorText!,
             style: widget.errorStyle ??
-                (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
+                AppTextStyles.bodyMedium(context).copyWith(
                   color: widget.errorBorderColor ?? AppColors.error,
                 ),
           ),
@@ -303,10 +304,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return InputDecoration(
       hintText: widget.hint,
       hintStyle: widget.hintStyle ??
-          (Theme.of(context).textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(
-            color: isDark
-                ? AppColors.darkOnSurfaceVariant
-                : AppColors.lightOnSurface,
+          AppTextStyles.bodyMedium(context).copyWith(
+            color: isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
           ),
       prefixIcon: widget.prefixIcon,
       suffixIcon: _buildSuffixIcon(),
@@ -378,7 +377,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           _obscureText ? Icons.visibility : Icons.visibility_off,
           color: Theme.of(context).brightness == Brightness.dark
               ? AppColors.darkOnSurfaceVariant
-              : AppColors.lightOnSurfaceVariant,
+              : AppColors.lightOnSurface,
         ),
         onPressed: _togglePasswordVisibility,
         tooltip: widget.passwordToggleTooltip ??
