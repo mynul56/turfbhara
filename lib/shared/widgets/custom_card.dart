@@ -65,9 +65,9 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     Widget cardWidget = _buildCard(context, isDark);
-    
+
     if (animated) {
       cardWidget = AnimatedContainer(
         duration: animationDuration ?? const Duration(milliseconds: 200),
@@ -75,14 +75,14 @@ class CustomCard extends StatelessWidget {
         child: cardWidget,
       );
     }
-    
+
     if (margin != null) {
       cardWidget = Padding(
         padding: margin!,
         child: cardWidget,
       );
     }
-    
+
     return cardWidget;
   }
 
@@ -102,33 +102,40 @@ class CustomCard extends StatelessWidget {
   Widget _buildElevatedCard(BuildContext context, bool isDark) {
     return Card(
       elevation: elevation ?? 2,
-      shadowColor: shadowColor ?? Theme.of(context).colorScheme.shadow.withOpacity(0.1),
-      surfaceTintColor: surfaceTintColor ?? Theme.of(context).colorScheme.primary,
-      shape: shape ?? RoundedRectangleBorder(
-        borderRadius: borderRadius ?? BorderRadius.circular(12),
-      ),
+      shadowColor:
+          shadowColor ?? Theme.of(context).colorScheme.shadow.withOpacity(0.1),
+      surfaceTintColor:
+          surfaceTintColor ?? Theme.of(context).colorScheme.primary,
+      shape: shape ??
+          RoundedRectangleBorder(
+            borderRadius: borderRadius ?? BorderRadius.circular(12),
+          ),
       borderOnForeground: borderOnForeground,
       clipBehavior: clipBehavior ?? Clip.none,
       color: color ?? Theme.of(context).colorScheme.surface,
-      child: _buildCardChild(context),
+      child: _buildCardContent(),
     );
   }
 
   Widget _buildFilledCard(BuildContext context, bool isDark) {
-    final cardWidget = Container(
-      width: width,
-      height: height,
-      alignment: alignment,
-      decoration: BoxDecoration(
-        color: color ?? Theme.of(context).colorScheme.surfaceVariant,
-        borderRadius: borderRadius ?? BorderRadius.circular(12),
-        border: border,
-        gradient: gradient,
+    final cardWidget = ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 0,
+        minHeight: 0,
+        maxWidth: width ?? double.infinity,
+        maxHeight: height ?? double.infinity,
       ),
-      clipBehavior: clipBehavior ?? Clip.antiAlias,
-      child: _buildCardContent(),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color ?? Theme.of(context).colorScheme.surfaceVariant,
+          borderRadius: borderRadius ?? BorderRadius.circular(12),
+          border: border,
+          gradient: gradient,
+        ),
+        child: _buildCardContent(),
+      ),
     );
-    
+
     return _wrapWithGestures(cardWidget);
   }
 
@@ -140,16 +147,17 @@ class CustomCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: color ?? Colors.transparent,
         borderRadius: borderRadius ?? BorderRadius.circular(12),
-        border: border ?? Border.all(
-          color: Theme.of(context).colorScheme.outline,
-          width: 1,
-        ),
+        border: border ??
+            Border.all(
+              color: Theme.of(context).colorScheme.outline,
+              width: 1,
+            ),
         gradient: gradient,
       ),
       clipBehavior: clipBehavior ?? Clip.antiAlias,
       child: _buildCardContent(),
     );
-    
+
     return _wrapWithGestures(cardWidget);
   }
 
@@ -183,7 +191,7 @@ class CustomCard extends StatelessWidget {
       clipBehavior: clipBehavior ?? Clip.antiAlias,
       child: _buildCardContent(),
     );
-    
+
     return _wrapWithGestures(cardWidget);
   }
 
@@ -208,7 +216,7 @@ class CustomCard extends StatelessWidget {
         },
         onLongPress: () {
           if (enableFeedback) {
-            DeviceUtils.mediumHapticFeedback();
+            DeviceUtils.lightHapticFeedback();
           }
           onLongPress?.call();
         },
@@ -218,16 +226,18 @@ class CustomCard extends StatelessWidget {
           }
           onDoubleTap?.call();
         },
-        child: enableSplash ? Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            onLongPress: onLongPress,
-            onDoubleTap: onDoubleTap,
-            borderRadius: borderRadius ?? BorderRadius.circular(12),
-            child: cardWidget,
-          ),
-        ) : cardWidget,
+        child: enableSplash
+            ? Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onTap,
+                  onLongPress: onLongPress,
+                  onDoubleTap: onDoubleTap,
+                  borderRadius: borderRadius ?? BorderRadius.circular(12),
+                  child: cardWidget,
+                ),
+              )
+            : cardWidget,
       );
     }
     return cardWidget;
@@ -269,7 +279,7 @@ class TurfCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     return CustomCard(
       margin: margin,
       onTap: onTap,
@@ -284,26 +294,30 @@ class TurfCard extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceVariant,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12)),
                 ),
                 child: imageUrl != null
                     ? ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12)),
                         child: Image.network(
                           imageUrl!,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => _buildImagePlaceholder(isDark),
+                          errorBuilder: (context, error, stackTrace) =>
+                              _buildImagePlaceholder(context, isDark),
                         ),
                       )
-                    : _buildImagePlaceholder(isDark),
+                    : _buildImagePlaceholder(context, isDark),
               ),
-              
+
               // Availability badge
               Positioned(
                 top: 8,
                 left: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: isAvailable ? AppColors.success : AppColors.error,
                     borderRadius: BorderRadius.circular(12),
@@ -318,7 +332,7 @@ class TurfCard extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               // Favorite button
               Positioned(
                 top: 8,
@@ -341,7 +355,7 @@ class TurfCard extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // Content section
           Padding(
             padding: const EdgeInsets.all(16),
@@ -354,9 +368,10 @@ class TurfCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         name,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -372,16 +387,17 @@ class TurfCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           rating.toStringAsFixed(1),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                       ],
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
-                
+
                 // Location
                 Row(
                   children: [
@@ -395,8 +411,10 @@ class TurfCard extends StatelessWidget {
                       child: Text(
                         location,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: isDark ? Theme.of(context).colorScheme.onSurfaceVariant : Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -404,32 +422,39 @@ class TurfCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                
+
                 // Amenities
-                if (amenities != null && amenities!.isNotEmpty) ..[
+                if (amenities != null && amenities!.isNotEmpty) ...[
                   Wrap(
                     spacing: 4,
                     runSpacing: 4,
                     children: amenities!.take(3).map((amenity) {
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           amenity,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 10,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 10,
+                              ),
                         ),
                       );
                     }).toList(),
                   ),
                   const SizedBox(height: 12),
                 ],
-                
+
                 // Price and book button
                 Row(
                   children: [
@@ -439,16 +464,22 @@ class TurfCard extends StatelessWidget {
                         children: [
                           Text(
                             price,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           Text(
                             'per hour',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: isDark ? Theme.of(context).colorScheme.onSurfaceVariant : Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
                           ),
                         ],
                       ),
@@ -456,16 +487,18 @@ class TurfCard extends StatelessWidget {
                     ElevatedButton(
                       onPressed: isAvailable ? onBookNow : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                       child: const Text(
                         'Book Now',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ],
@@ -478,7 +511,7 @@ class TurfCard extends StatelessWidget {
     );
   }
 
-  Widget _buildImagePlaceholder(bool isDark) {
+  Widget _buildImagePlaceholder(BuildContext context, bool isDark) {
     final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
@@ -526,7 +559,7 @@ class BookingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     Color statusColor;
     final colorScheme = Theme.of(context).colorScheme;
     switch (status.toLowerCase()) {
@@ -545,7 +578,7 @@ class BookingCard extends StatelessWidget {
       default:
         statusColor = colorScheme.primary;
     }
-    
+
     return CustomCard(
       margin: margin,
       onTap: onTap,
@@ -568,7 +601,8 @@ class BookingCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: statusColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -585,7 +619,7 @@ class BookingCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            
+
             // Booking details
             Row(
               children: [
@@ -625,16 +659,17 @@ class BookingCard extends StatelessWidget {
                       Text(
                         'ID: $bookingId',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: isDark ? Theme.of(context).colorScheme.onSurfaceVariant : Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                   ],
                 ),
               ],
             ),
-            
+
             // Action buttons
-            if (status.toLowerCase() == 'confirmed' && (onCancel != null || onReschedule != null)) ..[
+            if (status.toLowerCase() == 'confirmed' &&
+                (onCancel != null || onReschedule != null)) ...[
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -643,14 +678,16 @@ class BookingCard extends StatelessWidget {
                       child: OutlinedButton(
                         onPressed: onReschedule,
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: AppColors.primary),
+                          side: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         child: Text(
                           'Reschedule',
-                          style: TextStyle(color: AppColors.primary),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
                         ),
                       ),
                     ),
@@ -699,14 +736,14 @@ class BookingCard extends StatelessWidget {
         Text(
           '$label: ',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
         ),
         Text(
           value,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+                fontWeight: FontWeight.w600,
+              ),
         ),
       ],
     );
@@ -797,73 +834,4 @@ enum CardType {
   filled,
   outlined,
   custom,
-}
-
-  // Update image placeholder background color
-  Container(
-    decoration: BoxDecoration(
-      color: Theme.of(context).colorScheme.surfaceVariant,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-    ),
-    child: imageUrl != null
-      ? ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-          child: Image.network(
-            imageUrl!,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => _buildImagePlaceholder(isDark),
-          ),
-        )
-      : _buildImagePlaceholder(isDark),
-  ),
-
-  // Update availability badge colors
-  Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    decoration: BoxDecoration(
-      color: isAvailable 
-        ? Theme.of(context).colorScheme.primary 
-        : Theme.of(context).colorScheme.error,
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Text(
-      isAvailable ? 'Available' : 'Booked',
-      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-        color: Theme.of(context).colorScheme.onPrimary,
-        fontWeight: FontWeight.w600,
-      ),
-    ),
-  ),
-
-  // Update favorite icon colors
-  Icon(
-    isFavorite ? Icons.favorite : Icons.favorite_border,
-    color: isFavorite 
-      ? Theme.of(context).colorScheme.error 
-      : Theme.of(context).colorScheme.onSurfaceVariant,
-    size: 20,
-  ),
-
-  // Update star icon color
-  Icon(
-    Icons.star,
-    color: Theme.of(context).colorScheme.secondary,
-    size: 16,
-  ),
-
-  // Update status colors in switch statement
-  Color getStatusColor(BuildContext context, String status) {
-    switch (status.toLowerCase()) {
-      case 'confirmed':
-        return Theme.of(context).colorScheme.primary;
-      case 'pending':
-        return Theme.of(context).colorScheme.secondary;
-      case 'cancelled':
-        return Theme.of(context).colorScheme.error;
-      case 'completed':
-        return Theme.of(context).colorScheme.tertiary;
-      default:
-        return Theme.of(context).colorScheme.primary;
-    }
-  }
 }

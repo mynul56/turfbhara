@@ -54,16 +54,16 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     // Determine button properties based on type
     final buttonConfig = _getButtonConfig(context, isDark);
-    
+
     // Determine size properties
     final sizeConfig = _getSizeConfig(context);
-    
+
     // Build button content
     Widget buttonChild = _buildButtonContent(context);
-    
+
     // Wrap with tooltip if provided
     if (tooltip != null) {
       buttonChild = Tooltip(
@@ -71,7 +71,7 @@ class CustomButton extends StatelessWidget {
         child: buttonChild,
       );
     }
-    
+
     // Handle full width
     if (isFullWidth) {
       buttonChild = SizedBox(
@@ -84,13 +84,11 @@ class CustomButton extends StatelessWidget {
         child: buttonChild,
       );
     }
-    
+
     return buttonChild;
   }
-  
+
   ButtonConfig _getButtonConfig(BuildContext context, bool isDark) {
-    final theme = Theme.of(context);
-    
     switch (type) {
       case ButtonType.primary:
         return ButtonConfig(
@@ -99,15 +97,16 @@ class CustomButton extends StatelessWidget {
           borderColor: borderColor ?? AppColors.primary,
           elevation: 2,
         );
-      
+
       case ButtonType.secondary:
         return ButtonConfig(
-          backgroundColor: backgroundColor ?? (isDark ? AppColors.darkSurface : AppColors.lightSurface),
+          backgroundColor: backgroundColor ??
+              (isDark ? AppColors.darkSurface : AppColors.lightSurface),
           textColor: textColor ?? AppColors.primary,
           borderColor: borderColor ?? AppColors.primary,
           elevation: 1,
         );
-      
+
       case ButtonType.outline:
         return ButtonConfig(
           backgroundColor: backgroundColor ?? Colors.transparent,
@@ -115,7 +114,7 @@ class CustomButton extends StatelessWidget {
           borderColor: borderColor ?? AppColors.primary,
           elevation: 0,
         );
-      
+
       case ButtonType.text:
         return ButtonConfig(
           backgroundColor: backgroundColor ?? Colors.transparent,
@@ -123,7 +122,7 @@ class CustomButton extends StatelessWidget {
           borderColor: borderColor ?? Colors.transparent,
           elevation: 0,
         );
-      
+
       case ButtonType.danger:
         return ButtonConfig(
           backgroundColor: backgroundColor ?? AppColors.error,
@@ -131,7 +130,7 @@ class CustomButton extends StatelessWidget {
           borderColor: borderColor ?? AppColors.error,
           elevation: 2,
         );
-      
+
       case ButtonType.success:
         return ButtonConfig(
           backgroundColor: backgroundColor ?? AppColors.success,
@@ -139,7 +138,7 @@ class CustomButton extends StatelessWidget {
           borderColor: borderColor ?? AppColors.success,
           elevation: 2,
         );
-      
+
       case ButtonType.warning:
         return ButtonConfig(
           backgroundColor: backgroundColor ?? AppColors.warning,
@@ -147,7 +146,7 @@ class CustomButton extends StatelessWidget {
           borderColor: borderColor ?? AppColors.warning,
           elevation: 2,
         );
-      
+
       case ButtonType.info:
         return ButtonConfig(
           backgroundColor: backgroundColor ?? AppColors.info,
@@ -155,70 +154,81 @@ class CustomButton extends StatelessWidget {
           borderColor: borderColor ?? AppColors.info,
           elevation: 2,
         );
-      
+
       case ButtonType.ghost:
         return ButtonConfig(
           backgroundColor: backgroundColor ?? Colors.transparent,
-          textColor: textColor ?? (isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface),
+          textColor: textColor ??
+              (isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface),
           borderColor: borderColor ?? Colors.transparent,
           elevation: 0,
         );
     }
   }
-  
+
   SizeConfig _getSizeConfig(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     switch (size) {
       case ButtonSize.small:
         return SizeConfig(
           height: height ?? 32,
-          padding: padding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          textStyle: textStyle ?? AppTextStyles.labelSmall(context),
+          padding: padding ??
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          textStyle: textStyle ?? (textTheme.labelSmall ?? const TextStyle(fontSize: 12)),
           iconSize: 16,
         );
-      
+
       case ButtonSize.medium:
         return SizeConfig(
           height: height ?? 44,
-          padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          textStyle: textStyle ?? AppTextStyles.labelMedium(context),
+          padding: padding ??
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          textStyle: textStyle ?? (textTheme.labelMedium ?? const TextStyle(fontSize: 14)),
           iconSize: 20,
         );
-      
+
       case ButtonSize.large:
         return SizeConfig(
           height: height ?? 52,
-          padding: padding ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          textStyle: textStyle ?? AppTextStyles.labelLarge(context),
+          padding: padding ??
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          textStyle: textStyle ?? (textTheme.labelLarge ?? const TextStyle(fontSize: 16)),
           iconSize: 24,
         );
-      
+
       case ButtonSize.extraLarge:
         return SizeConfig(
           height: height ?? 60,
-          padding: padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-          textStyle: textStyle ?? AppTextStyles.headlineSmall(context),
+          padding: padding ??
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+          textStyle: textStyle ?? (textTheme.headlineSmall ?? const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           iconSize: 28,
         );
     }
   }
-  
+
   Widget _buildButtonContent(BuildContext context) {
-    final buttonConfig = _getButtonConfig(context, Theme.of(context).brightness == Brightness.dark);
+    final buttonConfig = _getButtonConfig(
+        context, Theme.of(context).brightness == Brightness.dark);
     final sizeConfig = _getSizeConfig(context);
-    
+
     final isEnabled = !isDisabled && !isLoading && onPressed != null;
-    
+
     return Material(
       elevation: buttonConfig.elevation,
       borderRadius: BorderRadius.circular(borderRadius ?? 8),
-      color: isEnabled ? buttonConfig.backgroundColor : buttonConfig.backgroundColor.withOpacity(0.5),
+      color: isEnabled
+          ? buttonConfig.backgroundColor
+          : buttonConfig.backgroundColor.withOpacity(0.5),
       child: InkWell(
-        onTap: isEnabled ? () {
-          if (enableHapticFeedback) {
-            DeviceUtils.lightHaptic();
-          }
-          onPressed?.call();
-        } : null,
+        onTap: isEnabled
+            ? () {
+                if (enableHapticFeedback) {
+                  DeviceUtils.lightHaptic();
+                }
+                onPressed?.call();
+              }
+            : null,
         borderRadius: BorderRadius.circular(borderRadius ?? 8),
         child: Container(
           height: sizeConfig.height,
@@ -227,8 +237,8 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius ?? 8),
             border: buttonConfig.borderColor != Colors.transparent
                 ? Border.all(
-                    color: isEnabled 
-                        ? buttonConfig.borderColor 
+                    color: isEnabled
+                        ? buttonConfig.borderColor
                         : buttonConfig.borderColor.withOpacity(0.5),
                     width: 1,
                   )
@@ -239,8 +249,9 @@ class CustomButton extends StatelessWidget {
       ),
     );
   }
-  
-  Widget _buildContent(BuildContext context, ButtonConfig buttonConfig, SizeConfig sizeConfig, bool isEnabled) {
+
+  Widget _buildContent(BuildContext context, ButtonConfig buttonConfig,
+      SizeConfig sizeConfig, bool isEnabled) {
     if (isLoading) {
       return Center(
         child: SizedBox(
@@ -249,15 +260,17 @@ class CustomButton extends StatelessWidget {
           child: CircularProgressIndicator(
             strokeWidth: 2,
             valueColor: AlwaysStoppedAnimation<Color>(
-              isEnabled ? buttonConfig.textColor : buttonConfig.textColor.withOpacity(0.5),
+              isEnabled
+                  ? buttonConfig.textColor
+                  : buttonConfig.textColor.withOpacity(0.5),
             ),
           ),
         ),
       );
     }
-    
+
     final List<Widget> children = [];
-    
+
     // Leading icon
     if (leadingIcon != null) {
       children.add(leadingIcon!);
@@ -266,27 +279,29 @@ class CustomButton extends StatelessWidget {
       children.add(icon!);
       children.add(const SizedBox(width: 8));
     }
-    
+
     // Text
     children.add(
       Flexible(
         child: Text(
           text,
           style: sizeConfig.textStyle.copyWith(
-            color: isEnabled ? buttonConfig.textColor : buttonConfig.textColor.withOpacity(0.5),
+            color: isEnabled
+                ? buttonConfig.textColor
+                : buttonConfig.textColor.withOpacity(0.5),
           ),
           textAlign: TextAlign.center,
           overflow: TextOverflow.ellipsis,
         ),
       ),
     );
-    
+
     // Trailing icon
     if (trailingIcon != null) {
       children.add(const SizedBox(width: 8));
       children.add(trailingIcon!);
     }
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -319,7 +334,7 @@ class CustomButtonFactory {
       tooltip: tooltip,
     );
   }
-  
+
   static Widget secondary({
     required String text,
     required VoidCallback? onPressed,
@@ -342,7 +357,7 @@ class CustomButtonFactory {
       tooltip: tooltip,
     );
   }
-  
+
   static Widget outline({
     required String text,
     required VoidCallback? onPressed,
@@ -365,7 +380,7 @@ class CustomButtonFactory {
       tooltip: tooltip,
     );
   }
-  
+
   static Widget text({
     required String text,
     required VoidCallback? onPressed,
@@ -386,7 +401,7 @@ class CustomButtonFactory {
       tooltip: tooltip,
     );
   }
-  
+
   static Widget danger({
     required String text,
     required VoidCallback? onPressed,
@@ -409,7 +424,7 @@ class CustomButtonFactory {
       tooltip: tooltip,
     );
   }
-  
+
   static Widget success({
     required String text,
     required VoidCallback? onPressed,
@@ -432,7 +447,7 @@ class CustomButtonFactory {
       tooltip: tooltip,
     );
   }
-  
+
   static Widget warning({
     required String text,
     required VoidCallback? onPressed,
@@ -455,7 +470,7 @@ class CustomButtonFactory {
       tooltip: tooltip,
     );
   }
-  
+
   static Widget info({
     required String text,
     required VoidCallback? onPressed,
@@ -478,7 +493,7 @@ class CustomButtonFactory {
       tooltip: tooltip,
     );
   }
-  
+
   static Widget ghost({
     required String text,
     required VoidCallback? onPressed,

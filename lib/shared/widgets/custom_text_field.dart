@@ -119,10 +119,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
     super.initState();
     _obscureText = widget.obscureText;
     _focusNode = widget.focusNode ?? FocusNode();
-    _controller = widget.controller ?? TextEditingController(text: widget.initialValue);
+    _controller =
+        widget.controller ?? TextEditingController(text: widget.initialValue);
     _errorText = widget.errorText;
     _hasError = widget.errorText != null;
-    
+
     // Add listener for auto validation
     if (widget.autoValidate || widget.autovalidateMode != null) {
       _controller.addListener(_validateInput);
@@ -162,19 +163,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.label != null) ..[
+        if (widget.label != null) ...[
           Text(
             widget.label!,
-            style: widget.labelStyle ?? AppTextStyles.labelMedium(context).copyWith(
-              color: _hasError 
-                  ? (widget.errorBorderColor ?? AppColors.error)
-                  : (isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface),
-            ),
+            style: widget.labelStyle ??
+                AppTextStyles.labelMedium(context).copyWith(
+                  color: _hasError
+                      ? (widget.errorBorderColor ?? AppColors.error)
+                      : (isDark
+                          ? AppColors.darkOnSurface
+                          : AppColors.lightOnSurface),
+                ),
           ),
           const SizedBox(height: 8),
         ],
@@ -202,28 +206,34 @@ class _CustomTextFieldState extends State<CustomTextField> {
           onFieldSubmitted: widget.onSubmitted,
           onTap: widget.onTap,
           onEditingComplete: widget.onEditingComplete,
-          autovalidateMode: widget.autovalidateMode ?? 
-              (widget.autoValidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled),
+          autovalidateMode: widget.autovalidateMode ??
+              (widget.autoValidate
+                  ? AutovalidateMode.onUserInteraction
+                  : AutovalidateMode.disabled),
           autofillHints: widget.autofillHints,
           style: widget.textStyle ?? AppTextStyles.bodyMedium(context),
           decoration: _buildInputDecoration(context, isDark),
         ),
-        if (widget.helperText != null && !_hasError) ..[
+        if (widget.helperText != null && !_hasError) ...[
           const SizedBox(height: 4),
           Text(
             widget.helperText!,
-            style: widget.helperStyle ?? AppTextStyles.bodySmall(context).copyWith(
-              color: isDark ? AppColors.darkOnSurfaceVariant : AppColors.lightOnSurfaceVariant,
-            ),
+            style: widget.helperStyle ??
+                AppTextStyles.bodyMedium(context).copyWith(
+                  color: isDark
+                      ? AppColors.darkOnSurface
+                      : AppColors.lightOnSurface,
+                ),
           ),
         ],
-        if (_hasError && _errorText != null) ..[
+        if (_hasError && _errorText != null) ...[
           const SizedBox(height: 4),
           Text(
             _errorText!,
-            style: widget.errorStyle ?? AppTextStyles.bodySmall(context).copyWith(
-              color: widget.errorBorderColor ?? AppColors.error,
-            ),
+            style: widget.errorStyle ??
+                AppTextStyles.bodyMedium(context).copyWith(
+                  color: widget.errorBorderColor ?? AppColors.error,
+                ),
           ),
         ],
       ],
@@ -290,32 +300,38 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   InputDecoration _buildInputDecoration(BuildContext context, bool isDark) {
     final borderRadius = BorderRadius.circular(widget.borderRadius ?? 8);
-    
+
     return InputDecoration(
       hintText: widget.hint,
-      hintStyle: widget.hintStyle ?? AppTextStyles.bodyMedium(context).copyWith(
-        color: isDark ? AppColors.darkOnSurfaceVariant : AppColors.lightOnSurfaceVariant,
-      ),
+      hintStyle: widget.hintStyle ??
+          AppTextStyles.bodyMedium(context).copyWith(
+            color: isDark
+                ? AppColors.darkOnSurfaceVariant
+                : AppColors.lightOnSurface,
+          ),
       prefixIcon: widget.prefixIcon,
       suffixIcon: _buildSuffixIcon(),
       prefixText: widget.prefixText,
       suffixText: widget.suffixText,
       filled: true,
-      fillColor: widget.fillColor ?? (isDark ? AppColors.darkSurface : AppColors.lightSurface),
-      contentPadding: widget.contentPadding ?? 
-          (widget.dense 
+      fillColor: widget.fillColor ??
+          (isDark ? AppColors.darkSurface : AppColors.lightSurface),
+      contentPadding: widget.contentPadding ??
+          (widget.dense
               ? const EdgeInsets.symmetric(horizontal: 12, vertical: 8)
               : const EdgeInsets.symmetric(horizontal: 16, vertical: 12)),
       border: OutlineInputBorder(
         borderRadius: borderRadius,
         borderSide: BorderSide(
-          color: widget.borderColor ?? (isDark ? AppColors.darkOutline : AppColors.lightOutline),
+          color: widget.borderColor ??
+              (isDark ? AppColors.darkOutline : AppColors.lightOutline),
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: borderRadius,
         borderSide: BorderSide(
-          color: widget.borderColor ?? (isDark ? AppColors.darkOutline : AppColors.lightOutline),
+          color: widget.borderColor ??
+              (isDark ? AppColors.darkOutline : AppColors.lightOutline),
         ),
       ),
       focusedBorder: OutlineInputBorder(
@@ -341,7 +357,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       disabledBorder: OutlineInputBorder(
         borderRadius: borderRadius,
         borderSide: BorderSide(
-          color: (widget.borderColor ?? (isDark ? AppColors.darkOutline : AppColors.lightOutline))
+          color: (widget.borderColor ??
+                  (isDark ? AppColors.darkOutline : AppColors.lightOutline))
               .withOpacity(0.5),
         ),
       ),
@@ -355,16 +372,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
       return widget.suffixIcon;
     }
 
-    if ((widget.type == TextFieldType.password || widget.obscureText) && widget.showPasswordToggle) {
+    if ((widget.type == TextFieldType.password || widget.obscureText) &&
+        widget.showPasswordToggle) {
       return IconButton(
         icon: Icon(
           _obscureText ? Icons.visibility : Icons.visibility_off,
-          color: Theme.of(context).brightness == Brightness.dark 
-              ? AppColors.darkOnSurfaceVariant 
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.darkOnSurfaceVariant
               : AppColors.lightOnSurfaceVariant,
         ),
         onPressed: _togglePasswordVisibility,
-        tooltip: widget.passwordToggleTooltip ?? 
+        tooltip: widget.passwordToggleTooltip ??
             (_obscureText ? 'Show password' : 'Hide password'),
       );
     }

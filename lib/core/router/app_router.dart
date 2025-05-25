@@ -41,27 +41,27 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String verification = '/verification';
   static const String changePassword = '/change-password';
-  
+
   // Main Routes
   static const String home = '/home';
   static const String mainNavigation = '/main';
-  
+
   // Turf Routes
   static const String turfList = '/turf-list';
   static const String turfDetail = '/turf-detail';
   static const String nearbyTurf = '/nearby-turf';
-  
+
   // Booking Routes
   static const String booking = '/booking';
   static const String bookingConfirmation = '/booking-confirmation';
   static const String bookingHistory = '/booking-history';
   static const String bookingDetail = '/booking-detail';
-  
+
   // Payment Routes
   static const String payment = '/payment';
   static const String paymentSuccess = '/payment-success';
   static const String paymentFailed = '/payment-failed';
-  
+
   // Profile Routes
   static const String profile = '/profile';
   static const String editProfile = '/edit-profile';
@@ -85,14 +85,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'splash',
         builder: (context, state) => const SplashPage(),
       ),
-      
+
       // Onboarding Route
       GoRoute(
         path: AppRoutes.onboarding,
         name: 'onboarding',
         builder: (context, state) => const OnboardingPage(),
       ),
-      
+
       // Auth Routes
       GoRoute(
         path: AppRoutes.login,
@@ -130,12 +130,18 @@ final routerProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
-      
+
       // Main Navigation Route
       GoRoute(
         path: AppRoutes.mainNavigation,
         name: 'mainNavigation',
-        builder: (context, state) => const MainNavigationPage(),
+        builder: (context, state) {
+          return MainNavigationPage(
+            location: state.uri.toString(),
+            child: const SizedBox
+                .shrink(), // Provide a default child or appropriate widget
+          );
+        },
         routes: [
           // Home Route
           GoRoute(
@@ -145,14 +151,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      
+
       // Home Route (Standalone)
       GoRoute(
         path: AppRoutes.home,
         name: 'homeStandalone',
         builder: (context, state) => const HomePage(),
       ),
-      
+
       // Turf Routes
       GoRoute(
         path: AppRoutes.turfList,
@@ -179,7 +185,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'nearbyTurf',
         builder: (context, state) => const NearbyTurfPage(),
       ),
-      
+
       // Booking Routes
       GoRoute(
         path: '${AppRoutes.booking}/:turfId',
@@ -215,7 +221,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           return BookingDetailPage(bookingId: bookingId);
         },
       ),
-      
+
       // Payment Routes
       GoRoute(
         path: '${AppRoutes.payment}/:bookingId',
@@ -254,7 +260,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
-      
+
       // Profile Routes
       GoRoute(
         path: AppRoutes.profile,
@@ -319,6 +325,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
+            // Fix: Add the required 'child' parameter to ElevatedButton
             ElevatedButton(
               onPressed: () => context.go(AppRoutes.home),
               child: const Text('Go Home'),
@@ -333,9 +340,9 @@ final routerProvider = Provider<GoRouter>((ref) {
 // Navigation Helper Extensions
 extension AppRouterExtension on GoRouter {
   void pushAndClearStack(String location, {Object? extra}) {
-    while (canPop()) {
-      pop();
-    }
+    // GoRouter does not have canPop/pop on itself, but context does.
+    // This is a custom helper, but GoRouter's context.pop() should be used in widgets.
+    // For now, just use pushReplacement for clearing stack.
     pushReplacement(location, extra: extra);
   }
 }
@@ -345,20 +352,22 @@ class AppNavigation {
   static void goToLogin(BuildContext context) {
     context.go(AppRoutes.login);
   }
-  
+
   static void goToRegister(BuildContext context) {
     context.go(AppRoutes.register);
   }
-  
+
   static void goToHome(BuildContext context) {
     context.go(AppRoutes.mainNavigation);
   }
-  
+
   static void goToTurfDetail(BuildContext context, String turfId) {
     context.push('${AppRoutes.turfDetail}/$turfId');
   }
-  
-  static void goToBooking(BuildContext context, String turfId, {
+
+  static void goToBooking(
+    BuildContext context,
+    String turfId, {
     DateTime? selectedDate,
     List<String>? selectedSlots,
   }) {
@@ -370,8 +379,10 @@ class AppNavigation {
       },
     );
   }
-  
-  static void goToPayment(BuildContext context, String bookingId, {
+
+  static void goToPayment(
+    BuildContext context,
+    String bookingId, {
     required double amount,
     String? paymentMethod,
   }) {
@@ -383,8 +394,10 @@ class AppNavigation {
       },
     );
   }
-  
-  static void goToPaymentSuccess(BuildContext context, String transactionId, {
+
+  static void goToPaymentSuccess(
+    BuildContext context,
+    String transactionId, {
     String? bookingId,
     double? amount,
   }) {
@@ -396,8 +409,9 @@ class AppNavigation {
       },
     );
   }
-  
-  static void goToPaymentFailed(BuildContext context, {
+
+  static void goToPaymentFailed(
+    BuildContext context, {
     required String error,
     String? bookingId,
   }) {
@@ -409,8 +423,9 @@ class AppNavigation {
       },
     );
   }
-  
-  static void goToVerification(BuildContext context, {
+
+  static void goToVerification(
+    BuildContext context, {
     required String email,
     required String type,
   }) {
@@ -422,21 +437,21 @@ class AppNavigation {
       },
     );
   }
-  
+
   static void goToChangePassword(BuildContext context, String token) {
     context.push(
       AppRoutes.changePassword,
       extra: {'token': token},
     );
   }
-  
+
   static void logout(BuildContext context) {
     context.go(AppRoutes.login);
   }
-  
+
   static void goBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
     } else {
       context.go(AppRoutes.home);
     }

@@ -9,50 +9,52 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class DeviceUtils {
   static final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
-  
+
   // Platform checks
   static bool get isAndroid => Platform.isAndroid;
   static bool get isIOS => Platform.isIOS;
   static bool get isWeb => kIsWeb;
   static bool get isMobile => isAndroid || isIOS;
-  static bool get isDesktop => Platform.isWindows || Platform.isMacOS || Platform.isLinux;
-  
+  static bool get isDesktop =>
+      Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
   // Screen information
-  static Size get screenSize => ui.window.physicalSize / ui.window.devicePixelRatio;
+  static Size get screenSize =>
+      ui.window.physicalSize / ui.window.devicePixelRatio;
   static double get screenWidth => screenSize.width;
   static double get screenHeight => screenSize.height;
   static double get devicePixelRatio => ui.window.devicePixelRatio;
   static Brightness get platformBrightness => ui.window.platformBrightness;
-  
+
   // Screen size categories
   static bool get isSmallScreen => screenWidth < 600;
   static bool get isMediumScreen => screenWidth >= 600 && screenWidth < 1200;
   static bool get isLargeScreen => screenWidth >= 1200;
-  
+
   static bool get isTablet => screenWidth >= 600;
   static bool get isPhone => screenWidth < 600;
-  
+
   // Orientation
   static bool get isPortrait => screenHeight > screenWidth;
   static bool get isLandscape => screenWidth > screenHeight;
-  
+
   // Safe area
   static EdgeInsets getSafeArea(BuildContext context) {
     return MediaQuery.of(context).padding;
   }
-  
+
   static double getStatusBarHeight(BuildContext context) {
     return MediaQuery.of(context).padding.top;
   }
-  
+
   static double getBottomSafeArea(BuildContext context) {
     return MediaQuery.of(context).padding.bottom;
   }
-  
+
   // Device information
   static Future<Map<String, dynamic>> getDeviceInfo() async {
     final Map<String, dynamic> deviceData = {};
-    
+
     try {
       if (isAndroid) {
         final androidInfo = await _deviceInfo.androidInfo;
@@ -113,7 +115,7 @@ class DeviceUtils {
           'maxTouchPoints': webInfo.maxTouchPoints,
         });
       }
-      
+
       // Add common device data
       deviceData.addAll({
         'screenWidth': screenWidth,
@@ -123,19 +125,18 @@ class DeviceUtils {
         'isPhone': isPhone,
         'orientation': isPortrait ? 'portrait' : 'landscape',
       });
-      
     } catch (e) {
       deviceData['error'] = e.toString();
     }
-    
+
     return deviceData;
   }
-  
+
   // App information
   static Future<Map<String, dynamic>> getAppInfo() async {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
-      
+
       return {
         'appName': packageInfo.appName,
         'packageName': packageInfo.packageName,
@@ -148,7 +149,7 @@ class DeviceUtils {
       return {'error': e.toString()};
     }
   }
-  
+
   // System UI
   static void setSystemUIOverlayStyle({
     Color? statusBarColor,
@@ -165,23 +166,24 @@ class DeviceUtils {
       ),
     );
   }
-  
+
   static void hideStatusBar() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
-  
+
   static void showStatusBar() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
   }
-  
+
   static void setFullScreen() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
-  
+
   static void exitFullScreen() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  
+
   // Orientation
   static void setPortraitOrientation() {
     SystemChrome.setPreferredOrientations([
@@ -189,14 +191,14 @@ class DeviceUtils {
       DeviceOrientation.portraitDown,
     ]);
   }
-  
+
   static void setLandscapeOrientation() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
   }
-  
+
   static void setAllOrientations() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -205,7 +207,7 @@ class DeviceUtils {
       DeviceOrientation.landscapeRight,
     ]);
   }
-  
+
   static void lockCurrentOrientation() {
     if (isPortrait) {
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -213,57 +215,62 @@ class DeviceUtils {
       SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
     }
   }
-  
+
   // Haptic feedback
   static void lightHaptic() {
     HapticFeedback.lightImpact();
   }
-  
+
+  static void lightHapticFeedback() {
+    HapticFeedback.lightImpact();
+  }
+
   static void mediumHaptic() {
     HapticFeedback.mediumImpact();
   }
-  
+
   static void heavyHaptic() {
     HapticFeedback.heavyImpact();
   }
-  
+
   static void selectionHaptic() {
     HapticFeedback.selectionClick();
   }
-  
+
   static void vibrate() {
     HapticFeedback.vibrate();
   }
-  
+
   // Keyboard
   static void hideKeyboard() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
-  
+
   static void showKeyboard() {
     SystemChannels.textInput.invokeMethod('TextInput.show');
   }
-  
+
   static bool isKeyboardVisible(BuildContext context) {
     return MediaQuery.of(context).viewInsets.bottom > 0;
   }
-  
+
   static double getKeyboardHeight(BuildContext context) {
     return MediaQuery.of(context).viewInsets.bottom;
   }
-  
+
   // Responsive design helpers
   static double getResponsiveWidth(BuildContext context, double percentage) {
     return MediaQuery.of(context).size.width * (percentage / 100);
   }
-  
+
   static double getResponsiveHeight(BuildContext context, double percentage) {
     return MediaQuery.of(context).size.height * (percentage / 100);
   }
-  
-  static double getResponsiveFontSize(BuildContext context, double baseFontSize) {
+
+  static double getResponsiveFontSize(
+      BuildContext context, double baseFontSize) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     if (screenWidth < 600) {
       return baseFontSize * 0.9; // Small screens
     } else if (screenWidth < 1200) {
@@ -272,10 +279,10 @@ class DeviceUtils {
       return baseFontSize * 1.1; // Large screens
     }
   }
-  
+
   static EdgeInsets getResponsivePadding(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     if (screenWidth < 600) {
       return const EdgeInsets.all(16); // Small screens
     } else if (screenWidth < 1200) {
@@ -284,10 +291,10 @@ class DeviceUtils {
       return const EdgeInsets.all(32); // Large screens
     }
   }
-  
+
   static int getResponsiveColumns(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     if (screenWidth < 600) {
       return 1; // Small screens
     } else if (screenWidth < 900) {
@@ -298,82 +305,82 @@ class DeviceUtils {
       return 4; // Extra large screens
     }
   }
-  
+
   // Text scale factor
   static double getTextScaleFactor(BuildContext context) {
     return MediaQuery.of(context).textScaleFactor;
   }
-  
+
   static bool isLargeTextScale(BuildContext context) {
     return getTextScaleFactor(context) > 1.3;
   }
-  
+
   // Accessibility
   static bool isAccessibilityEnabled(BuildContext context) {
     return MediaQuery.of(context).accessibleNavigation;
   }
-  
+
   static bool isBoldTextEnabled(BuildContext context) {
     return MediaQuery.of(context).boldText;
   }
-  
+
   static bool isHighContrastEnabled(BuildContext context) {
     return MediaQuery.of(context).highContrast;
   }
-  
+
   static bool isReduceMotionEnabled(BuildContext context) {
     return MediaQuery.of(context).disableAnimations;
   }
-  
+
   // Network type (requires additional setup)
   static Future<String> getNetworkType() async {
     // This would require connectivity_plus package
     // For now, return unknown
     return 'unknown';
   }
-  
+
   // Battery level (requires additional setup)
   static Future<int> getBatteryLevel() async {
     // This would require battery_plus package
     // For now, return -1 (unknown)
     return -1;
   }
-  
+
   // Storage information
   static Future<Map<String, int>> getStorageInfo() async {
     // This would require additional platform-specific code
     // For now, return empty map
     return {};
   }
-  
+
   // Memory information
   static Future<Map<String, int>> getMemoryInfo() async {
     // This would require additional platform-specific code
     // For now, return empty map
     return {};
   }
-  
+
   // Device capabilities
   static bool get hasCamera => isMobile;
   static bool get hasGPS => isMobile;
   static bool get hasBluetooth => isMobile;
   static bool get hasNFC => isAndroid; // Generally Android only
   static bool get hasBiometrics => isMobile;
-  
+
   // Performance helpers
   static void optimizeForPerformance() {
     // Disable debug banner in release mode
     if (kReleaseMode) {
       // Already handled by Flutter in release mode
     }
-    
+
     // Set system UI overlay style for better performance
     setSystemUIOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     );
   }
-  
+
   // Debug information
   static Map<String, dynamic> getDebugInfo(BuildContext context) {
     return {
@@ -396,7 +403,7 @@ class DeviceUtils {
       'reduceMotionEnabled': isReduceMotionEnabled(context),
     };
   }
-  
+
   // Utility methods for responsive design
   static T responsive<T>({
     required T mobile,
@@ -411,14 +418,15 @@ class DeviceUtils {
       return mobile;
     }
   }
-  
-  static T responsiveValue<T>(BuildContext context, {
+
+  static T responsiveValue<T>(
+    BuildContext context, {
     required T small,
     T? medium,
     T? large,
   }) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     if (screenWidth >= 1200 && large != null) {
       return large;
     } else if (screenWidth >= 600 && medium != null) {
@@ -427,32 +435,32 @@ class DeviceUtils {
       return small;
     }
   }
-  
+
   // Copy to clipboard
   static Future<void> copyToClipboard(String text) async {
     await Clipboard.setData(ClipboardData(text: text));
   }
-  
+
   // Get from clipboard
   static Future<String?> getFromClipboard() async {
     final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     return clipboardData?.text;
   }
-  
+
   // Share content (requires additional setup)
   static Future<void> shareText(String text) async {
     // This would require share_plus package
     // For now, copy to clipboard
     await copyToClipboard(text);
   }
-  
+
   // Open URL (requires additional setup)
   static Future<bool> openUrl(String url) async {
     // This would require url_launcher package
     // For now, return false
     return false;
   }
-  
+
   // Check if app can open URL
   static Future<bool> canOpenUrl(String url) async {
     // This would require url_launcher package

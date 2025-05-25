@@ -11,10 +11,10 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: AppColors.lightColorScheme,
-      
+
       // Typography
       textTheme: AppTextStyles.lightTextTheme,
-      
+
       // App Bar Theme
       appBarTheme: AppBarTheme(
         elevation: 0,
@@ -33,12 +33,13 @@ class AppTheme {
           statusBarIconBrightness: Brightness.dark,
         ),
       ),
-      
+
       // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.lightColorScheme.surface,
         selectedItemColor: AppColors.lightColorScheme.primary,
-        unselectedItemColor: AppColors.lightColorScheme.onSurface.withOpacity(0.6),
+        unselectedItemColor:
+            AppColors.lightColorScheme.onSurface.withOpacity(0.6),
         type: BottomNavigationBarType.fixed,
         elevation: 8,
         selectedLabelStyle: AppTextStyles.lightTextTheme.bodySmall?.copyWith(
@@ -46,9 +47,9 @@ class AppTheme {
         ),
         unselectedLabelStyle: AppTextStyles.lightTextTheme.bodySmall,
       ),
-      
+
       // Card Theme
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shadowColor: AppColors.lightColorScheme.shadow.withOpacity(0.1),
         shape: RoundedRectangleBorder(
@@ -56,7 +57,7 @@ class AppTheme {
         ),
         color: AppColors.lightColorScheme.surface,
       ),
-      
+
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -73,7 +74,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Outlined Button Theme
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
@@ -91,7 +92,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Text Button Theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
@@ -113,10 +114,10 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: AppColors.darkColorScheme,
-      
+
       // Typography
       textTheme: AppTextStyles.darkTextTheme,
-      
+
       // App Bar Theme
       appBarTheme: AppBarTheme(
         elevation: 0,
@@ -135,12 +136,13 @@ class AppTheme {
           statusBarIconBrightness: Brightness.light,
         ),
       ),
-      
+
       // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkColorScheme.surface,
         selectedItemColor: AppColors.darkColorScheme.primary,
-        unselectedItemColor: AppColors.darkColorScheme.onSurface.withOpacity(0.6),
+        unselectedItemColor:
+            AppColors.darkColorScheme.onSurface.withOpacity(0.6),
         type: BottomNavigationBarType.fixed,
         elevation: 8,
         selectedLabelStyle: AppTextStyles.darkTextTheme.bodySmall?.copyWith(
@@ -148,9 +150,9 @@ class AppTheme {
         ),
         unselectedLabelStyle: AppTextStyles.darkTextTheme.bodySmall,
       ),
-      
+
       // Card Theme
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shadowColor: AppColors.darkColorScheme.shadow.withOpacity(0.1),
         shape: RoundedRectangleBorder(
@@ -158,7 +160,7 @@ class AppTheme {
         ),
         color: AppColors.darkColorScheme.surface,
       ),
-      
+
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -175,7 +177,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Outlined Button Theme
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
@@ -193,7 +195,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Text Button Theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(

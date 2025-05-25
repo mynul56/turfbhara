@@ -32,9 +32,9 @@ class LoadingWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final loadingColor = color ?? AppColors.primary;
-    
+
     Widget loadingIndicator;
-    
+
     switch (type) {
       case LoadingType.circular:
         loadingIndicator = SizedBox(
@@ -83,14 +83,14 @@ class LoadingWidget extends StatelessWidget {
         loadingIndicator = child ?? const SizedBox.shrink();
         break;
     }
-    
+
     if (!showMessage || message == null) {
       return Padding(
         padding: padding ?? EdgeInsets.zero,
         child: loadingIndicator,
       );
     }
-    
+
     return Padding(
       padding: padding ?? const EdgeInsets.all(16),
       child: Column(
@@ -101,9 +101,10 @@ class LoadingWidget extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             message!,
-            style: messageStyle ?? AppTextStyles.bodyMedium(context).copyWith(
-              color: isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
-            ),
+            style: messageStyle ??
+                Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -143,7 +144,9 @@ class LoadingOverlay extends StatelessWidget {
         if (isLoading)
           Positioned.fill(
             child: GestureDetector(
-              onTap: dismissible ? null : () {}, // Prevent taps when not dismissible
+              onTap: dismissible
+                  ? null
+                  : () {}, // Prevent taps when not dismissible
               child: Container(
                 color: backgroundColor ?? Colors.black.withOpacity(0.5),
                 child: Center(
@@ -187,7 +190,8 @@ class FullScreenLoading extends StatelessWidget {
     return PopScope(
       canPop: canPop,
       child: Scaffold(
-        backgroundColor: backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor:
+            backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
         body: Center(
           child: LoadingWidget(
             message: message,
@@ -234,13 +238,13 @@ class _DotsLoadingIndicatorState extends State<DotsLoadingIndicator>
         vsync: this,
       ),
     );
-    
+
     _animations = _controllers.map((controller) {
       return Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(parent: controller, curve: Curves.easeInOut),
       );
     }).toList();
-    
+
     _startAnimations();
   }
 
@@ -275,7 +279,8 @@ class _DotsLoadingIndicatorState extends State<DotsLoadingIndicator>
               width: widget.size,
               height: widget.size,
               decoration: BoxDecoration(
-                color: widget.color.withOpacity(0.3 + (_animations[index].value * 0.7)),
+                color: widget.color
+                    .withOpacity(0.3 + (_animations[index].value * 0.7)),
                 shape: BoxShape.circle,
               ),
             );
@@ -315,11 +320,11 @@ class _PulseLoadingIndicatorState extends State<PulseLoadingIndicator>
       duration: widget.duration,
       vsync: this,
     );
-    
+
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
-    
+
     _controller.repeat(reverse: true);
   }
 
@@ -380,13 +385,13 @@ class _WaveLoadingIndicatorState extends State<WaveLoadingIndicator>
         vsync: this,
       ),
     );
-    
+
     _animations = _controllers.map((controller) {
       return Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(parent: controller, curve: Curves.easeInOut),
       );
     }).toList();
-    
+
     _startAnimations();
   }
 
@@ -424,7 +429,8 @@ class _WaveLoadingIndicatorState extends State<WaveLoadingIndicator>
                 height: widget.size * (0.2 + (_animations[index].value * 0.8)),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: widget.color.withOpacity(1.0 - _animations[index].value),
+                    color: widget.color
+                        .withOpacity(1.0 - _animations[index].value),
                     width: 2,
                   ),
                   shape: BoxShape.circle,
@@ -452,7 +458,8 @@ class SpinnerLoadingIndicator extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SpinnerLoadingIndicator> createState() => _SpinnerLoadingIndicatorState();
+  State<SpinnerLoadingIndicator> createState() =>
+      _SpinnerLoadingIndicatorState();
 }
 
 class _SpinnerLoadingIndicatorState extends State<SpinnerLoadingIndicator>
