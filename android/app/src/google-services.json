@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "78385859501",
+    "project_id": "turfbhara",
+    "storage_bucket": "turfbhara.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78385859501:android:c5dec12aa0351a27882f24",
+        "android_client_info": {
+          "package_name": "com.turfbhara.turf_bhara"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLJ6B8HgOyRTbifpkdHqrF8NjDGaWa5K8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

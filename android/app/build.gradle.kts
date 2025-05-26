@@ -3,42 +3,45 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services")
 }
-
 android {
-    namespace = "com.turfbhara.turf_bhara"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    namespace = "com.turfbhara.turf_bhara" // Existing namespace
+    compileSdk = flutter.compileSdkVersion // Existing compileSdk
 
-    compileOptions {
+    // Add this line
+    ndkVersion = "27.0.12077973" 
+
+    compileOptions { // Existing compileOptions
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
-    kotlinOptions {
+    kotlinOptions { // Existing kotlinOptions
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.turfbhara.turf_bhara"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        applicationId = "com.turfbhara.turf_bhara" // Existing applicationId
+        minSdk = flutter.minSdkVersion // Existing minSdk
+        targetSdk = flutter.targetSdkVersion // Existing targetSdk
+        versionCode = flutter.versionCode // Existing versionCode
+        versionName = flutter.versionName // Existing versionName
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("debug") // Existing signingConfig
         }
     }
 }
 
-flutter {
-    source = "../.."
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
+    
+    // Add the dependency for Firebase Analytics
+    implementation("com.google.firebase:firebase-analytics")
+    
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
