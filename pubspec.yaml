@@ -51,11 +51,11 @@ dependencies:
 
   # Web Interop
   js: ^0.6.7
-  web: ^0.4.0
+  web: ^0.5.0
 
   # Authentication
   google_sign_in: ^6.1.6
-  sign_in_with_apple: ^5.0.0
+  sign_in_with_apple: ^7.0.1
 
   # Location & Maps
   geolocator: ^10.1.0
@@ -119,7 +119,7 @@ dependencies:
   flutter_native_splash: ^2.3.7
   flutter_launcher_icons: ^0.13.1
   font_awesome_flutter: ^10.8.0
-  image_cropper: ^5.0.1
+  image_cropper: ^9.1.0
 
 dev_dependencies:
   flutter_test:
@@ -151,6 +151,7 @@ flutter:
     - assets/animations/
     - assets/logos/
     - assets/onboarding/
+    - assets/fonts/
 
   fonts:
     - family: Poppins

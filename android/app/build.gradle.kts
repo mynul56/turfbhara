@@ -5,43 +5,44 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
     id("com.google.gms.google-services")
 }
+
 android {
-    namespace = "com.turfbhara.turf_bhara" // Existing namespace
-    compileSdk = flutter.compileSdkVersion // Existing compileSdk
+    namespace = "com.turfbhara.turf_bhara"
+    compileSdk = flutter.compileSdkVersion
 
-    // Add this line
-    ndkVersion = "27.0.12077973" 
+    ndkVersion = "27.0.12077973"
 
-    compileOptions { // Existing compileOptions
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
 
-    kotlinOptions { // Existing kotlinOptions
-        jvmTarget = JavaVersion.VERSION_11.toString()
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
-        applicationId = "com.turfbhara.turf_bhara" // Existing applicationId
-        minSdk = 23 // Updated minSdk for Firebase compatibility
-        targetSdk = flutter.targetSdkVersion // Existing targetSdk
-        versionCode = flutter.versionCode // Existing versionCode
-        versionName = flutter.versionName // Existing versionName
+        applicationId = "com.turfbhara.turf_bhara"
+        minSdk = 23
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        multiDexEnabled = true
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug") // Existing signingConfig
+            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }
 
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
-    
-    // Add the dependency for Firebase Analytics
     implementation("com.google.firebase:firebase-analytics")
-    
+    implementation("androidx.multidex:multidex:2.0.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
