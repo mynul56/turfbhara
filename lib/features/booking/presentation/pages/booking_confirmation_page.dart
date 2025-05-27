@@ -15,7 +15,6 @@ class BookingConfirmationPage extends ConsumerStatefulWidget {
 class _BookingConfirmationPageState
     extends ConsumerState<BookingConfirmationPage> {
   bool _isLoading = false;
-  bool _hasError = false;
   String _selectedPaymentMethod = 'bkash';
   bool _acceptedTerms = false;
 
@@ -37,7 +36,6 @@ class _BookingConfirmationPageState
         context.go('/booking/success');
       }
     } catch (e) {
-      setState(() => _hasError = true);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to confirm booking'),

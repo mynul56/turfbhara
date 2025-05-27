@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId = "com.turfbhara.turf_bhara" // Existing applicationId
-        minSdk = flutter.minSdkVersion // Existing minSdk
+        minSdk = 23 // Updated minSdk for Firebase compatibility
         targetSdk = flutter.targetSdkVersion // Existing targetSdk
         versionCode = flutter.versionCode // Existing versionCode
         versionName = flutter.versionName // Existing versionName

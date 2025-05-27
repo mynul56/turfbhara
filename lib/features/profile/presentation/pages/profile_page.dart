@@ -11,7 +11,6 @@ class ProfilePage extends ConsumerStatefulWidget {
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
   bool _isLoading = true;
-  bool _hasError = false;
 
   @override
   void initState() {
@@ -22,14 +21,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Future<void> _loadUserProfile() async {
     setState(() {
       _isLoading = true;
-      _hasError = false;
     });
 
     try {
       // TODO: Implement profile loading logic
       await Future.delayed(const Duration(seconds: 2));
     } catch (e) {
-      setState(() => _hasError = true);
+      // No need to set _hasError, as we are not using it to display error
     } finally {
       setState(() => _isLoading = false);
     }
@@ -45,21 +43,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     return Scaffold(
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _hasError
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Failed to load profile'),
-                      const SizedBox(height: 8),
-                      FilledButton(
-                        onPressed: _loadUserProfile,
-                        child: const Text('Retry'),
-                      ),
-                    ],
-                  ),
-                )
-              : CustomScrollView(
+          : CustomScrollView(
                   slivers: [
                     _buildAppBar(),
                     SliverToBoxAdapter(

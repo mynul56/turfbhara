@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'config/app_config.dart';
 import 'config/firebase_options.dart';
 import 'config/router/app_router.dart';
@@ -17,22 +15,20 @@ import 'generated/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   // Initialize Hive for local storage
   await Hive.initFlutter();
   await HiveService.init();
-  
+
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
+
   // Set system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -42,15 +38,11 @@ void main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  
+
   // Initialize logger
   AppLogger.init();
-  
-  runApp(
-    ProviderScope(
-      child: const TurfBharaApp(),
-    ),
-  );
+
+  runApp(ProviderScope(child: const TurfBharaApp()));
 }
 
 class TurfBharaApp extends ConsumerWidget {
@@ -61,19 +53,19 @@ class TurfBharaApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
-    
+
     return MaterialApp.router(
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
-      
+
       // Routing
       routerConfig: router,
-      
+
       // Theme
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      
+
       // Localization
       locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -83,7 +75,7 @@ class TurfBharaApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      
+
       // Builder for global configurations
       builder: (context, child) {
         return MediaQuery(
